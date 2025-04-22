@@ -105,4 +105,7 @@ pnpm-lock.yaml
 # /**/bin/
 
 # 谨慎：忽略子目录的gitignore配置
-/garden-manager/.gitignore 
+/garden-manager/.gitignore
+
+# 防止嵌套git仓库
+garden-manager/ 
