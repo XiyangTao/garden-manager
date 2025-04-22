@@ -1,0 +1,78 @@
+.deduction-statistics {
+  padding: 16px;
+}
+
+.deduction-statistics .statistics-card {
+  background: #fff;
+}
+
+.deduction-statistics .filter-container {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.deduction-statistics .chart-container {
+  min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.deduction-statistics .chart-loading {
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 图表样式优化 */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #e0e0e0;
+}
+
+.recharts-tooltip-wrapper {
+  z-index: 1000;
+}
+
+/* 图例样式优化 */
+.recharts-default-legend {
+  margin-top: 10px !important;
+}
+
+.recharts-legend-item-text {
+  margin-left: 0 !important;
+}
+
+.recharts-legend-item {
+  padding-right: 20px;
+}
+
+/* 隐藏图例图标 */
+.recharts-legend-icon {
+  display: none !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .deduction-statistics .chart-container {
+    height: 300px;
+  }
+}
+
+/* 自定义图例样式 */
+.custom-legend {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.custom-legend .legend-item {
+  padding: 0 10px;
+}
+
+.custom-legend .legend-text {
+  color: #333;
+} 

@@ -108,4 +108,3 @@ pnpm-lock.yaml
 /garden-manager/.gitignore
 
 # 防止嵌套git仓库
-garden-manager/ 

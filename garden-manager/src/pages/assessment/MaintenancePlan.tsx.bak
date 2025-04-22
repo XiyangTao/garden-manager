@@ -1,0 +1,944 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  Table,
+  Card,
+  Button,
+  Space,
+  Tag,
+  Input,
+  Row,
+  Col,
+  Form,
+  Select,
+  DatePicker,
+  Badge,
+  Calendar,
+  Tooltip,
+  Popconfirm,
+  message,
+  Typography,
+  Modal,
+  Radio,
+  Tabs,
+} from 'antd';
+import {
+  SearchOutlined,
+  FileAddOutlined,
+  ExportOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  ClearOutlined,
+  CalendarOutlined,
+  UnorderedListOutlined,
+} from '@ant-design/icons';
+import type { ColumnsType } from 'antd/es/table';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+import './MaintenancePlan.css';
+
+const { Title, Text } = Typography;
+const { RangePicker } = DatePicker;
+const { Option } = Select;
+const { TabPane } = Tabs;
+
+// 定义养护计划数据类型
+interface MaintenancePlanType {
+  key: string;
+  planId: string;
+  planName: string;
+  planType: string;
+  area: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+  maintenanceUnit: string;
+  responsiblePerson: string;
+  frequency: string;
+  priority: string;
+  description: string;
+}
+
+// 养护计划状态枚举
+const PLAN_STATUS = {
+  PENDING: '未开始',
+  IN_PROGRESS: '进行中',
+  COMPLETED: '已完成',
+  OVERDUE: '已逾期',
+  CANCELLED: '已取消'
+};
+
+// 养护计划类型枚举
+const PLAN_TYPES = {
+  DAILY: '日常养护',
+  WEEKLY: '周期养护',
+  MONTHLY: '月度养护',
+  QUARTERLY: '季度养护',
+  ANNUAL: '年度养护',
+  SPECIAL: '专项养护'
+};
+
+// 优先级枚举
+const PRIORITIES = {
+  HIGH: '高',
+  MEDIUM: '中',
+  LOW: '低'
+};
+
+// 频率枚举
+const FREQUENCIES = {
+  DAILY: '每日',
+  WEEKLY: '每周',
+  BIWEEKLY: '两周一次',
+  MONTHLY: '每月',
+  QUARTERLY: '每季度',
+  HALFYEAR: '半年一次',
+  YEARLY: '每年'
+};
+
+const MaintenancePlan: React.FC = () => {
+  const [plans, setPlans] = useState<MaintenancePlanType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState<string>('');
+  const [viewType, setViewType] = useState<'list' | 'calendar'>('list');
+  const [filterType, setFilterType] = useState<string | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string | null>(null);
+  const [dateRange, setDateRange] = useState<[string, string] | null>(null);
+  const [form] = Form.useForm();
+  const [yearForm] = Form.useForm();
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [currentPlan, setCurrentPlan] = useState<MaintenancePlanType | null>(null);
+  const [activeTab, setActiveTab] = useState<string>('annual');
+  const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+
+  // 生成模拟数据
+  const generateMockData = useCallback(() => {
+    const mockData: MaintenancePlanType[] = [];
+    const statusValues = Object.values(PLAN_STATUS);
+    const typeValues = Object.values(PLAN_TYPES);
+    const priorityValues = Object.values(PRIORITIES);
+    const frequencyValues = Object.values(FREQUENCIES);
+    const areas = ['东区', '西区', '南区', '北区', '中心区'];
+    const maintenanceUnits = ['恒通园林公司', '绿洲园林公司', '盛世园林公司', '华美园林公司', '永兴园林公司'];
+    const responsiblePersons = ['张三', '李四', '王五', '赵六', '钱七'];
+
+    for (let i = 1; i <= 30; i++) {
+      const startDate = dayjs().subtract(Math.floor(Math.random() * 30), 'day').format('YYYY-MM-DD');
+      const endDate = dayjs(startDate).add(Math.floor(Math.random() * 90) + 30, 'day').format('YYYY-MM-DD');
+      const status = statusValues[Math.floor(Math.random() * statusValues.length)];
+      const planType = typeValues[Math.floor(Math.random() * typeValues.length)];
+      const area = areas[Math.floor(Math.random() * areas.length)];
+      const maintenanceUnit = maintenanceUnits[Math.floor(Math.random() * maintenanceUnits.length)];
+      const responsiblePerson = responsiblePersons[Math.floor(Math.random() * responsiblePersons.length)];
+      const priority = priorityValues[Math.floor(Math.random() * priorityValues.length)];
+      const frequency = frequencyValues[Math.floor(Math.random() * frequencyValues.length)];
+
+      mockData.push({
+        key: i.toString(),
+        planId: `YHJI-${2023}-${String(i).padStart(4, '0')}`,
+        planName: `${area}${planType}计划`,
+        planType,
+        area,
+        startDate,
+        endDate,
+        status,
+        maintenanceUnit,
+        responsiblePerson,
+        frequency,
+        priority,
+        description: `该计划负责${area}的${planType}工作，需要定期对区域内的植物、设施进行维护和养护。`
+      });
+    }
+    return mockData;
+  }, []);
+
+  // 获取所有养护单位的唯一值
+  const getUniqueMaintenanceUnits = useCallback(() => {
+    const units = generateMockData().map(item => item.maintenanceUnit);
+    return Array.from(new Set(units));
+  }, [generateMockData]);
+
+  // 获取所有年份的唯一值
+  const getUniqueYears = useCallback(() => {
+    const years = generateMockData().map(item => dayjs(item.startDate).year().toString());
+    return Array.from(new Set(years));
+  }, [generateMockData]);
+
+  // 过滤年度计划数据
+  const filterAnnualData = useCallback(() => {
+    let filteredData = [...generateMockData()];
+    
+    // 根据年度计划标签过滤
+    filteredData = filteredData.filter(item => 
+      item.planType === PLAN_TYPES.ANNUAL || 
+      item.planType === PLAN_TYPES.QUARTERLY || 
+      item.planType === PLAN_TYPES.SPECIAL
+    );
+    
+    // 根据养护单位筛选
+    if (selectedUnit) {
+      filteredData = filteredData.filter(item => item.maintenanceUnit === selectedUnit);
+    }
+    
+    // 根据计划年份筛选
+    if (selectedYear) {
+      filteredData = filteredData.filter(item => 
+        dayjs(item.startDate).year().toString() === selectedYear
+      );
+    }
+    
+    return filteredData;
+  }, [generateMockData, selectedUnit, selectedYear]);
+
+  // 处理年度计划查询
+  const handleAnnualSearch = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setPlans(filterAnnualData());
+      setLoading(false);
+      message.success('查询成功');
+    }, 500);
+  };
+
+  // 清空年度计划的筛选条件
+  const handleAnnualClear = () => {
+    yearForm.resetFields();
+    setSelectedUnit(null);
+    setSelectedYear(null);
+    
+    setLoading(true);
+    setTimeout(() => {
+      setPlans(filterAnnualData());
+      setLoading(false);
+      message.info('已清空搜索条件');
+    }, 500);
+  };
+
+  // 过滤数据
+  const filterData = useCallback(() => {
+    let filteredData = [...generateMockData()];
+    
+    // 根据当前Tab页过滤数据
+    if (activeTab === 'annual') {
+      filteredData = filteredData.filter(item => 
+        item.planType === PLAN_TYPES.ANNUAL || 
+        item.planType === PLAN_TYPES.QUARTERLY || 
+        item.planType === PLAN_TYPES.SPECIAL
+      );
+    } else if (activeTab === 'monthly') {
+      filteredData = filteredData.filter(item => 
+        item.planType === PLAN_TYPES.MONTHLY || 
+        item.planType === PLAN_TYPES.WEEKLY || 
+        item.planType === PLAN_TYPES.DAILY
+      );
+    }
+    
+    if (searchText) {
+      filteredData = filteredData.filter(item => 
+        item.planName.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.planId.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.maintenanceUnit.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.responsiblePerson.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+    
+    if (filterType) {
+      filteredData = filteredData.filter(item => item.planType === filterType);
+    }
+    
+    if (filterStatus) {
+      filteredData = filteredData.filter(item => item.status === filterStatus);
+    }
+    
+    if (dateRange) {
+      filteredData = filteredData.filter(item => {
+        const startDate = dayjs(item.startDate);
+        const endDate = dayjs(item.endDate);
+        const rangeStart = dayjs(dateRange[0]);
+        const rangeEnd = dayjs(dateRange[1]);
+        
+        return (
+          (startDate.isAfter(rangeStart) || startDate.isSame(rangeStart) || endDate.isAfter(rangeStart)) && 
+          (endDate.isBefore(rangeEnd) || endDate.isSame(rangeEnd) || startDate.isBefore(rangeEnd))
+        );
+      });
+    }
+    
+    return filteredData;
+  }, [searchText, filterType, filterStatus, dateRange, generateMockData, activeTab]);
+
+  // 初始化数据
+  useEffect(() => {
+    setLoading(true);
+    // 模拟API请求
+    setTimeout(() => {
+      if (activeTab === 'annual') {
+        setPlans(filterAnnualData());
+      } else {
+        setPlans(filterData());
+      }
+      setLoading(false);
+    }, 500);
+  }, [filterData, filterAnnualData, activeTab]);
+
+  // 处理标签页变更
+  const handleTabChange = (key: string) => {
+    setActiveTab(key);
+    setFilterType(null);
+    form.resetFields();
+    yearForm.resetFields();
+    setSelectedUnit(null);
+    setSelectedYear(null);
+  };
+
+  // 添加新计划
+  const handleAdd = () => {
+    message.info('添加新养护计划功能将在后续版本实现');
+  };
+
+  // 导出功能
+  const handleExport = () => {
+    message.info('导出功能将在后续版本实现');
+  };
+
+  // 编辑计划
+  const handleEdit = (record: MaintenancePlanType) => {
+    message.info('编辑养护计划功能将在后续版本实现');
+  };
+
+  // 查看计划详情
+  const handleView = (record: MaintenancePlanType) => {
+    setCurrentPlan(record);
+    setIsModalVisible(true);
+  };
+
+  // 删除计划
+  const handleDelete = (id: string) => {
+    setPlans(plans.filter(item => item.planId !== id));
+    message.success('养护计划已删除');
+  };
+
+  // 获取状态标签颜色
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case PLAN_STATUS.PENDING:
+        return 'default';
+      case PLAN_STATUS.IN_PROGRESS:
+        return 'processing';
+      case PLAN_STATUS.COMPLETED:
+        return 'success';
+      case PLAN_STATUS.OVERDUE:
+        return 'error';
+      case PLAN_STATUS.CANCELLED:
+        return 'warning';
+      default:
+        return 'default';
+    }
+  };
+
+  // 获取优先级标签颜色
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case PRIORITIES.HIGH:
+        return 'red';
+      case PRIORITIES.MEDIUM:
+        return 'orange';
+      case PRIORITIES.LOW:
+        return 'green';
+      default:
+        return 'blue';
+    }
+  };
+
+  // 年度计划表格列定义
+  const annualColumns: ColumnsType<MaintenancePlanType> = [
+    {
+      title: '序号',
+      key: 'index',
+      width: 60,
+      fixed: 'left',
+      render: (_, __, index) => index + 1,
+    },
+    {
+      title: '计划名称',
+      dataIndex: 'planName',
+      key: 'planName',
+      width: 180,
+      render: (text) => <span className="plan-name">{text}</span>
+    },
+    {
+      title: '养护计划年份',
+      key: 'planYear',
+      width: 120,
+      render: (_, record) => dayjs(record.startDate).year(),
+      sorter: (a, b) => dayjs(a.startDate).year() - dayjs(b.startDate).year(),
+    },
+    {
+      title: '养护单位',
+      dataIndex: 'maintenanceUnit',
+      key: 'maintenanceUnit',
+      width: 140,
+    },
+    {
+      title: '操作',
+      key: 'action',
+      width: 160,
+      fixed: 'right',
+      render: (_, record) => (
+        <Space size="small">
+          <Tooltip title="查看">
+            <Button type="text" size="small" icon={<EyeOutlined />} onClick={() => handleView(record)} />
+          </Tooltip>
+          <Tooltip title="编辑">
+            <Button type="text" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          </Tooltip>
+          <Tooltip title="删除">
+            <Popconfirm
+              title="确定删除此养护计划吗?"
+              onConfirm={() => handleDelete(record.planId)}
+              okText="确定"
+              cancelText="取消"
+            >
+              <Button type="text" size="small" danger icon={<DeleteOutlined />} />
+            </Popconfirm>
+          </Tooltip>
+        </Space>
+      ),
+    },
+  ];
+
+  // 高级搜索表单
+  const renderAdvancedSearch = () => (
+    <Card className="search-card">
+      <Form 
+        form={form} 
+        layout="horizontal" 
+        onFinish={handleSearch}
+        className="search-form"
+      >
+        <Row gutter={[16, 16]} align="middle" className="search-row">
+          <Col xs={24} sm={12} md={8} lg={6} className="search-col">
+            <Form.Item label="关键词搜索" name="searchText" className="search-form-item">
+              <Input 
+                placeholder="计划名称/编号/单位/负责人" 
+                prefix={<SearchOutlined />} 
+                onChange={(e) => setSearchText(e.target.value)}
+                allowClear
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={8} lg={6} className="search-col">
+            <Form.Item label="计划类型" name="planType" className="search-form-item">
+              <Select 
+                placeholder="请选择计划类型" 
+                allowClear
+                onChange={(value) => setFilterType(value)}
+              >
+                {Object.values(PLAN_TYPES).map((type) => (
+                  <Option key={type} value={type}>{type}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={8} lg={6} className="search-col">
+            <Form.Item label="计划状态" name="status" className="search-form-item">
+              <Select 
+                placeholder="请选择计划状态" 
+                allowClear
+                onChange={(value) => setFilterStatus(value)}
+              >
+                {Object.values(PLAN_STATUS).map((status) => (
+                  <Option key={status} value={status}>{status}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={12} lg={6} className="search-col">
+            <Form.Item label="日期范围" name="dateRange" className="search-form-item">
+              <RangePicker 
+                style={{ width: '100%' }} 
+                onChange={(dates, dateStrings) => {
+                  if (dates) {
+                    setDateRange([dateStrings[0], dateStrings[1]]);
+                  } else {
+                    setDateRange(null);
+                  }
+                }} 
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={8} lg={24} className="button-col">
+            <Space>
+              <Button icon={<ClearOutlined />} onClick={handleClear}>清空</Button>
+              <Button type="primary" icon={<SearchOutlined />} htmlType="submit">查询</Button>
+            </Space>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
+  );
+
+  // 年度计划搜索表单
+  const renderAnnualSearch = () => (
+    <Card className="search-card">
+      <Form 
+        form={yearForm} 
+        layout="horizontal" 
+        onFinish={handleAnnualSearch}
+        className="search-form"
+      >
+        <Row gutter={[16, 16]} align="middle" className="search-row">
+          <Col xs={24} sm={8} md={6} lg={6} className="search-col">
+            <Form.Item label="养护单位" name="maintenanceUnit" className="search-form-item">
+              <Select 
+                placeholder="请选择养护单位" 
+                allowClear
+                onChange={(value) => setSelectedUnit(value)}
+                style={{ width: '100%' }}
+              >
+                {getUniqueMaintenanceUnits().map((unit) => (
+                  <Option key={unit} value={unit}>{unit}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={8} md={6} lg={6} className="search-col">
+            <Form.Item label="计划年份" name="planYear" className="search-form-item">
+              <Select 
+                placeholder="请选择计划年份" 
+                allowClear
+                onChange={(value) => setSelectedYear(value)}
+                style={{ width: '100%' }}
+              >
+                {getUniqueYears().map((year) => (
+                  <Option key={year} value={year}>{year}年</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={8} md={6} lg={6} className="search-col button-col-inline">
+            <Space>
+              <Button icon={<ClearOutlined />} onClick={handleAnnualClear}>清空</Button>
+              <Button type="primary" icon={<SearchOutlined />} htmlType="submit">查询</Button>
+            </Space>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
+  );
+
+  // 处理搜索表单提交
+  const handleSearch = () => {
+    setPlans(filterData());
+    message.success('查询成功');
+  };
+
+  // 清空搜索条件
+  const handleClear = () => {
+    form.resetFields();
+    setSearchText('');
+    setFilterType(null);
+    setFilterStatus(null);
+    setDateRange(null);
+    setPlans(generateMockData());
+    message.info('已清空搜索条件');
+  };
+
+  // 渲染日历上的数据
+  const dateCellRender = (value: Dayjs) => {
+    const currentDatePlans = plans.filter(plan => {
+      const startDate = dayjs(plan.startDate);
+      const endDate = dayjs(plan.endDate);
+      return (value.isSame(startDate, 'day') || value.isSame(endDate, 'day') || 
+              (value.isAfter(startDate) && value.isBefore(endDate)));
+    });
+
+    return (
+      <ul className="calendar-plan-list">
+        {currentDatePlans.map(plan => (
+          <li key={plan.planId} onClick={() => handleView(plan)}>
+            <Badge 
+              status={getStatusColor(plan.status) as any} 
+              text={<Tooltip title={plan.planName}>{plan.planName.length > 6 ? `${plan.planName.substring(0, 6)}...` : plan.planName}</Tooltip>} 
+            />
+          </li>
+        ))}
+      </ul>
+    );
+  };
+  
+  // 表格列定义 - 保留原有的列定义，供月度计划使用
+  const columns: ColumnsType<MaintenancePlanType> = [
+    {
+      title: '序号',
+      key: 'index',
+      width: 60,
+      fixed: 'left',
+      render: (_, __, index) => index + 1,
+    },
+    {
+      title: '计划编号',
+      dataIndex: 'planId',
+      key: 'planId',
+      width: 120,
+    },
+    {
+      title: '计划名称',
+      dataIndex: 'planName',
+      key: 'planName',
+      width: 180,
+      render: (text) => <span className="plan-name">{text}</span>
+    },
+    {
+      title: '养护单位',
+      dataIndex: 'maintenanceUnit',
+      key: 'maintenanceUnit',
+      width: 140,
+    },
+    {
+      title: '负责人',
+      dataIndex: 'responsiblePerson',
+      key: 'responsiblePerson',
+      width: 100,
+    },
+    {
+      title: '养护区域',
+      dataIndex: 'area',
+      key: 'area',
+      width: 100,
+      filters: [
+        { text: '东区', value: '东区' },
+        { text: '西区', value: '西区' },
+        { text: '南区', value: '南区' },
+        { text: '北区', value: '北区' },
+        { text: '中心区', value: '中心区' },
+      ],
+      onFilter: (value, record) => record.area === value,
+    },
+    {
+      title: '计划类型',
+      dataIndex: 'planType',
+      key: 'planType',
+      width: 120,
+      filters: Object.values(PLAN_TYPES).map(type => ({ text: type, value: type })),
+      onFilter: (value, record) => record.planType === value,
+    },
+    {
+      title: '优先级',
+      dataIndex: 'priority',
+      key: 'priority',
+      width: 80,
+      render: (priority) => (
+        <Tag color={getPriorityColor(priority)}>
+          {priority}
+        </Tag>
+      ),
+      filters: Object.values(PRIORITIES).map(priority => ({ text: priority, value: priority })),
+      onFilter: (value, record) => record.priority === value,
+    },
+    {
+      title: '频率',
+      dataIndex: 'frequency',
+      key: 'frequency',
+      width: 100,
+    },
+    {
+      title: '开始日期',
+      dataIndex: 'startDate',
+      key: 'startDate',
+      width: 110,
+      sorter: (a, b) => dayjs(a.startDate).unix() - dayjs(b.startDate).unix(),
+    },
+    {
+      title: '结束日期',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      width: 110,
+      sorter: (a, b) => dayjs(a.endDate).unix() - dayjs(b.endDate).unix(),
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      width: 100,
+      render: (status) => (
+        <Badge status={getStatusColor(status) as any} text={status} />
+      ),
+      filters: Object.values(PLAN_STATUS).map(status => ({ text: status, value: status })),
+      onFilter: (value, record) => record.status === value,
+    },
+    {
+      title: '操作',
+      key: 'action',
+      width: 160,
+      fixed: 'right',
+      render: (_, record) => (
+        <Space size="small">
+          <Tooltip title="查看">
+            <Button type="text" size="small" icon={<EyeOutlined />} onClick={() => handleView(record)} />
+          </Tooltip>
+          <Tooltip title="编辑">
+            <Button type="text" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          </Tooltip>
+          <Tooltip title="删除">
+            <Popconfirm
+              title="确定删除此养护计划吗?"
+              onConfirm={() => handleDelete(record.planId)}
+              okText="确定"
+              cancelText="取消"
+            >
+              <Button type="text" size="small" danger icon={<DeleteOutlined />} />
+            </Popconfirm>
+          </Tooltip>
+        </Space>
+      ),
+    },
+  ];
+
+  return (
+    <div className="maintenance-plan">
+      <Tabs activeKey={activeTab} onChange={handleTabChange} className="plan-tabs">
+        <TabPane tab="年度计划" key="annual">
+          {renderAnnualSearch()}
+          
+          <Card 
+            title={<Title level={4}>年度养护计划列表</Title>}
+            className="data-card"
+            extra={
+              <Space>
+                <Radio.Group value={viewType} onChange={(e) => setViewType(e.target.value)} buttonStyle="solid">
+                  <Radio.Button value="list"><UnorderedListOutlined /> 列表</Radio.Button>
+                  <Radio.Button value="calendar"><CalendarOutlined /> 日历</Radio.Button>
+                </Radio.Group>
+                <Button icon={<FileAddOutlined />} type="primary" onClick={handleAdd}>增加</Button>
+                <Button icon={<ExportOutlined />} onClick={handleExport}>导出</Button>
+              </Space>
+            }
+          >
+            {viewType === 'list' ? (
+              <Table
+                columns={annualColumns}
+                dataSource={plans}
+                loading={loading}
+                rowKey="planId"
+                scroll={{ x: 1200 }}
+                pagination={{
+                  showSizeChanger: true,
+                  showQuickJumper: true,
+                  showTotal: (total) => `共 ${total} 条`
+                }}
+              />
+            ) : (
+              <div className="calendar-container">
+                <Calendar 
+                  dateCellRender={dateCellRender} 
+                  locale={{ 
+                    lang: {
+                      locale: 'zh-cn',
+                      yearFormat: 'YYYY年',
+                      monthFormat: 'MM月',
+                      monthBeforeYear: false,
+                      today: '今天',
+                      now: '此刻',
+                      backToToday: '返回今天',
+                      ok: '确定',
+                      timeSelect: '选择时间',
+                      dateSelect: '选择日期',
+                      weekSelect: '选择周',
+                      clear: '清除',
+                      month: '月',
+                      year: '年',
+                      previousMonth: '上个月',
+                      nextMonth: '下个月',
+                      monthSelect: '选择月份',
+                      yearSelect: '选择年份',
+                      decadeSelect: '选择年代',
+                      dayFormat: 'D日',
+                      dateFormat: 'YYYY-MM-DD',
+                      dateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
+                      previousYear: '上一年',
+                      nextYear: '下一年',
+                      previousDecade: '上一年代',
+                      nextDecade: '下一年代',
+                      previousCentury: '上一世纪',
+                      nextCentury: '下一世纪',
+                      week: '周',
+                      placeholder: '请选择日期',
+                    },
+                    timePickerLocale: {
+                      placeholder: '请选择时间',
+                    },
+                  }}
+                />
+              </div>
+            )}
+          </Card>
+        </TabPane>
+        <TabPane tab="月度计划" key="monthly">
+          {renderAdvancedSearch()}
+          
+          <Card 
+            title={<Title level={4}>月度养护计划列表</Title>}
+            className="data-card"
+            extra={
+              <Space>
+                <Radio.Group value={viewType} onChange={(e) => setViewType(e.target.value)} buttonStyle="solid">
+                  <Radio.Button value="list"><UnorderedListOutlined /> 列表</Radio.Button>
+                  <Radio.Button value="calendar"><CalendarOutlined /> 日历</Radio.Button>
+                </Radio.Group>
+                <Button icon={<FileAddOutlined />} type="primary" onClick={handleAdd}>增加</Button>
+                <Button icon={<ExportOutlined />} onClick={handleExport}>导出</Button>
+              </Space>
+            }
+          >
+            {viewType === 'list' ? (
+              <Table
+                columns={columns}
+                dataSource={plans}
+                loading={loading}
+                rowKey="planId"
+                scroll={{ x: 1500 }}
+                pagination={{
+                  showSizeChanger: true,
+                  showQuickJumper: true,
+                  showTotal: (total) => `共 ${total} 条`
+                }}
+              />
+            ) : (
+              <div className="calendar-container">
+                <Calendar 
+                  dateCellRender={dateCellRender} 
+                  locale={{ 
+                    lang: {
+                      locale: 'zh-cn',
+                      yearFormat: 'YYYY年',
+                      monthFormat: 'MM月',
+                      monthBeforeYear: false,
+                      today: '今天',
+                      now: '此刻',
+                      backToToday: '返回今天',
+                      ok: '确定',
+                      timeSelect: '选择时间',
+                      dateSelect: '选择日期',
+                      weekSelect: '选择周',
+                      clear: '清除',
+                      month: '月',
+                      year: '年',
+                      previousMonth: '上个月',
+                      nextMonth: '下个月',
+                      monthSelect: '选择月份',
+                      yearSelect: '选择年份',
+                      decadeSelect: '选择年代',
+                      dayFormat: 'D日',
+                      dateFormat: 'YYYY-MM-DD',
+                      dateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
+                      previousYear: '上一年',
+                      nextYear: '下一年',
+                      previousDecade: '上一年代',
+                      nextDecade: '下一年代',
+                      previousCentury: '上一世纪',
+                      nextCentury: '下一世纪',
+                      week: '周',
+                      placeholder: '请选择日期',
+                    },
+                    timePickerLocale: {
+                      placeholder: '请选择时间',
+                    },
+                  }}
+                />
+              </div>
+            )}
+          </Card>
+        </TabPane>
+      </Tabs>
+
+      {currentPlan && (
+        <Modal
+          title="养护计划详情"
+          open={isModalVisible}
+          onCancel={() => setIsModalVisible(false)}
+          footer={[
+            <Button key="close" onClick={() => setIsModalVisible(false)}>
+              关闭
+            </Button>,
+            <Button key="edit" type="primary" onClick={() => handleEdit(currentPlan)}>
+              编辑
+            </Button>,
+          ]}
+          width={720}
+        >
+          <div className="plan-detail">
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <Text strong>计划编号: </Text>
+                <Text>{currentPlan.planId}</Text>
+              </Col>
+              <Col span={12}>
+                <Text strong>计划名称: </Text>
+                <Text>{currentPlan.planName}</Text>
+              </Col>
+            </Row>
+            <Row gutter={[16, 16]} style={{ marginTop: 8 }}>
+              <Col span={12}>
+                <Text strong>计划类型: </Text>
+                <Text>{currentPlan.planType}</Text>
+              </Col>
+              <Col span={12}>
+                <Text strong>养护区域: </Text>
+                <Text>{currentPlan.area}</Text>
+              </Col>
+            </Row>
+            <Row gutter={[16, 16]} style={{ marginTop: 8 }}>
+              <Col span={12}>
+                <Text strong>养护单位: </Text>
+                <Text>{currentPlan.maintenanceUnit}</Text>
+              </Col>
+              <Col span={12}>
+                <Text strong>负责人: </Text>
+                <Text>{currentPlan.responsiblePerson}</Text>
+              </Col>
+            </Row>
+            <Row gutter={[16, 16]} style={{ marginTop: 8 }}>
+              <Col span={12}>
+                <Text strong>频率: </Text>
+                <Text>{currentPlan.frequency}</Text>
+              </Col>
+              <Col span={12}>
+                <Text strong>优先级: </Text>
+                <Tag color={getPriorityColor(currentPlan.priority)}>{currentPlan.priority}</Tag>
+              </Col>
+            </Row>
+            <Row gutter={[16, 16]} style={{ marginTop: 8 }}>
+              <Col span={12}>
+                <Text strong>开始日期: </Text>
+                <Text>{currentPlan.startDate}</Text>
+              </Col>
+              <Col span={12}>
+                <Text strong>结束日期: </Text>
+                <Text>{currentPlan.endDate}</Text>
+              </Col>
+            </Row>
+            <Row gutter={[16, 16]} style={{ marginTop: 8 }}>
+              <Col span={24}>
+                <Text strong>状态: </Text>
+                <Badge status={getStatusColor(currentPlan.status) as any} text={currentPlan.status} />
+              </Col>
+            </Row>
+            <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+              <Col span={24}>
+                <Text strong>计划描述: </Text>
+                <div style={{ marginTop: 8 }}>
+                  <Text>{currentPlan.description}</Text>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+export default MaintenancePlan; 

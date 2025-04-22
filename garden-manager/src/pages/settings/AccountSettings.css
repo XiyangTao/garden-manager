@@ -1,0 +1,119 @@
+.account-settings {
+  padding: 20px;
+}
+
+.back-button-container {
+  margin-bottom: 16px;
+}
+
+.back-button {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.back-button .anticon {
+  margin-right: 4px;
+}
+
+.settings-card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Section headers with flex layout */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-header h4 {
+  margin-bottom: 0;
+}
+
+/* Profile section */
+.profile-container {
+  padding: 16px 0;
+}
+
+.profile-form {
+  max-width: 100%;
+}
+
+/* Password section */
+.password-container {
+  padding: 16px 0;
+  max-width: 500px;
+}
+
+/* Users management section */
+.users-container {
+  padding: 16px 0;
+}
+
+/* Table styling */
+.ant-table-wrapper {
+  margin-top: 16px;
+}
+
+.ant-table-cell {
+  word-break: break-word;
+}
+
+.ant-table-row:hover {
+  background-color: #f5f5f5;
+}
+
+/* Modal footer alignment */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .account-settings {
+    padding: 10px;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .section-header button {
+    align-self: flex-end;
+  }
+}
+
+/* Tab pane animations */
+.ant-tabs-tabpane {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button spacing in table actions */
+.ant-table-cell .ant-space {
+  gap: 4px;
+}
+
+/* Tag styling */
+.ant-tag {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+} 

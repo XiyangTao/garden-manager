@@ -1,0 +1,35 @@
+.problem-management {
+  margin-bottom: 24px;
+}
+
+.filter-card {
+  margin-bottom: 24px;
+}
+
+.card-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.advanced-search {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed #f0f0f0;
+}
+
+.table-card {
+  margin-bottom: 16px;
+}
+
+.ant-table-cell .ant-tag {
+  margin-right: 0;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 992px) {
+  .advanced-search .ant-row > div {
+    margin-bottom: 16px;
+  }
+} 

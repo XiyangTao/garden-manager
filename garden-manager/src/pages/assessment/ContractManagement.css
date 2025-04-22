@@ -1,0 +1,211 @@
+.contract-management {
+  margin: 0;
+  padding: 0;
+}
+
+.contract-management .search-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.contract-management .data-card {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.contract-management .data-card .ant-card-head {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 24px;
+}
+
+.contract-management .data-card .ant-card-body {
+  padding: 24px;
+}
+
+.contract-management .ant-table-thead > tr > th {
+  background-color: #fafafa;
+  font-weight: 500;
+}
+
+.contract-management .ant-table-tbody > tr.ant-table-row:hover > td {
+  background-color: #f5f5f5;
+}
+
+.contract-management .ant-badge-status-text {
+  margin-left: 8px;
+}
+
+.contract-management .ant-badge-status-success {
+  background-color: #52c41a;
+}
+
+.contract-management .ant-badge-status-warning {
+  background-color: #faad14;
+}
+
+.contract-management .ant-badge-status-error {
+  background-color: #ff4d4f;
+}
+
+.contract-management .ant-badge-status-default {
+  background-color: #d9d9d9;
+}
+
+.contract-management .contract-name {
+  font-weight: 500;
+  color: #1890ff;
+}
+
+.contract-management .ant-btn-text {
+  padding: 0 8px;
+}
+
+.contract-management .ant-btn-text:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.contract-management .ant-table-row-expand-icon {
+  margin-right: 8px;
+}
+
+.contract-management .ant-form-item-label > label {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.contract-management .ant-input-affix-wrapper {
+  border-radius: 4px;
+}
+
+.contract-management .ant-select-selector {
+  border-radius: 4px !important;
+}
+
+.contract-management .ant-picker {
+  border-radius: 4px;
+}
+
+.contract-management .ant-btn {
+  border-radius: 4px;
+  height: 32px;
+}
+
+.contract-management .ant-btn-primary {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.contract-management .ant-btn-primary:hover {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.contract-management .ant-table-pagination {
+  margin: 16px 0;
+}
+
+.contract-detail .ant-typography strong {
+  margin-right: 8px;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.contract-detail .ant-divider-horizontal.ant-divider-with-text-left::before {
+  width: 0%;
+}
+
+.contract-detail .ant-divider-horizontal.ant-divider-with-text-left::after {
+  width: 100%;
+}
+
+.contract-detail .ant-divider-inner-text {
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.contract-detail .ant-row {
+  line-height: 32px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .contract-management .ant-form-item {
+    margin-bottom: 16px;
+  }
+  
+  .contract-management .search-card .ant-form-item {
+    margin-bottom: 12px;
+  }
+  
+  .contract-management .ant-card-head-title {
+    padding: 12px 0;
+  }
+  
+  .contract-management .ant-card-extra {
+    padding: 12px 0;
+  }
+  
+  .contract-detail .ant-col {
+    margin-bottom: 8px;
+  }
+  
+  .contract-management .ant-drawer-content-wrapper {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .contract-management .ant-form-item {
+    margin-bottom: 12px;
+  }
+  
+  .contract-management .search-card,
+  .contract-management .data-card {
+    border-radius: 4px;
+  }
+  
+  .contract-management .ant-card-head {
+    padding: 8px 16px;
+  }
+  
+  .contract-management .ant-card-body {
+    padding: 16px;
+  }
+}
+
+/* 搜索表单样式 */
+.contract-management .search-form {
+  width: 100%;
+}
+
+.contract-management .search-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.contract-management .search-col {
+  display: flex;
+  align-items: center;
+}
+
+.contract-management .search-form-item {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.contract-management .button-col {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (max-width: 576px) {
+  .contract-management .button-col {
+    justify-content: flex-start;
+  }
+  
+  .contract-management .search-form-item {
+    margin-bottom: 0;
+  }
+} 

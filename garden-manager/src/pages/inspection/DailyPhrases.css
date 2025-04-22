@@ -1,0 +1,34 @@
+.daily-phrases {
+  padding: 16px;
+}
+
+.data-card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* 表格内容样式 */
+.ant-table-cell {
+  word-break: break-word;
+}
+
+/* 操作按钮间距 */
+.ant-table-cell .ant-space {
+  gap: 4px !important;
+}
+
+/* 表格鼠标悬停行样式 */
+.ant-table-tbody > tr:hover > td {
+  background-color: #f0f9eb !important;
+}
+
+/* 日常用语单元格样式，让它占据主要空间 */
+.ant-table-cell:nth-child(2) {
+  max-width: 70%;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .daily-phrases {
+    padding: 8px;
+  }
+} 

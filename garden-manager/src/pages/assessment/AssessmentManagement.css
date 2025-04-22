@@ -1,0 +1,66 @@
+.assessment-management {
+  padding: 16px;
+}
+
+.assessment-management .filter-card {
+  margin-bottom: 16px;
+}
+
+.assessment-management .table-card {
+  background: #fff;
+}
+
+.assessment-management .filter-form {
+  margin-bottom: 0;
+}
+
+.assessment-management .filter-form .ant-form-item {
+  margin-bottom: 0;
+}
+
+.assessment-management .ant-form-item-label {
+  padding-bottom: 0;
+}
+
+/* 对齐按钮与表单项 */
+.assessment-management .action-buttons {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+}
+
+/* 确保按钮组的底部与输入框底部对齐 */
+.assessment-management .action-buttons .ant-form-item-control-input {
+  min-height: auto;
+}
+
+/* 表格标题样式 */
+.assessment-management .ant-table-thead > tr > th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+/* 表格内容行样式 */
+.assessment-management .ant-table-tbody > tr:hover > td {
+  background-color: #f0f8ff;
+}
+
+/* 列对齐样式 */
+.assessment-management .ant-table-cell-align-right {
+  text-align: right;
+}
+
+.assessment-management .ant-table-cell-align-center {
+  text-align: center;
+}
+
+/* 状态标签样式 */
+.assessment-management .ant-tag {
+  min-width: 60px;
+  text-align: center;
+}
+
+/* 操作按钮样式 */
+.assessment-management .ant-btn-link {
+  padding: 0 4px;
+} 

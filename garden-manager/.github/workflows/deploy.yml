@@ -1,0 +1,91 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm install --legacy-peer-deps
+    
+    - name: Run tests
+      run: npm test -- --passWithNoTests
+    
+    - name: Build
+      run: npm run build
+    
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-files
+        path: build/
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Download build artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: build-files
+        path: build
+    
+    # Option 1: Deploy to a server via SSH
+    - name: Deploy to server
+      if: false  # Set to true when ready to use
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "build/*"
+        target: "/var/www/garden-manager"
+        strip_components: 1
+    
+    # Option 2: Deploy to GitHub Pages
+    - name: Deploy to GitHub Pages
+      if: false  # Set to true when ready to use
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: build
+    
+    # Option 3: Deploy to AWS S3
+    - name: Configure AWS credentials
+      if: false  # Set to true when ready to use
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    
+    - name: Deploy to S3
+      if: false  # Set to true when ready to use
+      run: |
+        aws s3 sync build/ s3://your-bucket-name/ --delete
+        
+    # Add notification steps
+    - name: Notify on success
+      if: success()
+      run: echo "Deployment successful!"
+    
+    - name: Notify on failure
+      if: failure()
+      run: echo "Deployment failed!" 

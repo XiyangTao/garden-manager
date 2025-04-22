@@ -1,0 +1,142 @@
+.profile-settings {
+  padding: 20px;
+}
+
+.back-button-container {
+  margin-bottom: 16px;
+}
+
+.back-button {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.back-button .anticon {
+  margin-right: 4px;
+}
+
+.profile-card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.profile-header h2 {
+  margin-bottom: 0;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  padding: 20px 0;
+}
+
+.avatar-section {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180px;
+}
+
+.avatar-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.user-avatar {
+  border: 1px solid #f0f0f0;
+  margin: 0 auto;
+}
+
+.avatar-upload {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.avatar-upload .ant-upload {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.avatar-feedback {
+  text-align: center;
+  margin-top: 8px;
+  width: 100%;
+  min-height: 24px;
+}
+
+.info-section {
+  flex: 1;
+}
+
+.profile-form {
+  max-width: 500px;
+}
+
+.field-description {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .profile-settings {
+    padding: 10px;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .profile-header button,
+  .profile-header .ant-space {
+    align-self: flex-end;
+  }
+  
+  .profile-content {
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .avatar-section {
+    align-items: center;
+    width: 100%;
+  }
+}
+
+/* Animation */
+.profile-card {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} 

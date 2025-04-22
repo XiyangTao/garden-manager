@@ -1,0 +1,75 @@
+.leaderboard {
+  padding: 16px;
+}
+
+.leaderboard .filter-card {
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+.leaderboard .filter-row {
+  margin-bottom: 16px;
+}
+
+.leaderboard .rank-selector {
+  display: flex;
+  justify-content: center;
+}
+
+.leaderboard .chart-card {
+  background: #fff;
+}
+
+.leaderboard .chart-container {
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leaderboard .chart-loading {
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 图表样式优化 */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #e0e0e0;
+}
+
+.recharts-tooltip-wrapper {
+  z-index: 1000;
+}
+
+/* 自定义图例样式 */
+.custom-legend {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.custom-legend .legend-item {
+  padding: 0 10px;
+}
+
+.custom-legend .legend-text {
+  color: #333;
+  font-weight: bold;
+}
+
+/* 排名样式 */
+.top-rank {
+  font-weight: bold;
+  color: #f50;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .leaderboard .chart-container {
+    height: 400px;
+  }
+} 

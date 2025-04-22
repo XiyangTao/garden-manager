@@ -1,0 +1,140 @@
+.dashboard-layout {
+  min-height: 100vh;
+}
+
+.dashboard-sider {
+  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.08);
+  z-index: 10;
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+}
+
+.site-layout {
+  background: #f0f2f5;
+  margin-left: 240px;
+  transition: all 0.2s;
+}
+
+.site-layout.collapsed {
+  margin-left: 80px;
+}
+
+.logo {
+  height: 64px;
+  margin: 0;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #52c41a;
+  white-space: nowrap;
+  overflow: hidden;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.site-header {
+  background: #fff;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+}
+
+.header-left {
+  padding-left: 16px;
+}
+
+.header-right {
+  padding-right: 16px;
+}
+
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.trigger:hover {
+  color: #52c41a;
+}
+
+.user-dropdown-button {
+  display: flex;
+  align-items: center;
+  height: 64px;
+}
+
+.site-content {
+  margin: 24px 16px;
+  padding: 0;
+  min-height: 280px;
+}
+
+.content-header {
+  margin-bottom: 24px;
+}
+
+.content-header h2 {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+.content-body {
+  background: transparent;
+}
+
+/* Loading container */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+}
+
+/* Menu styles */
+.ant-menu-sub.ant-menu-inline {
+  background: #fafafa !important;
+}
+
+.ant-menu-submenu-title {
+  font-weight: 500;
+}
+
+.ant-menu-item-selected {
+  background-color: #f6ffed !important;
+}
+
+.ant-menu-item-selected::after {
+  border-right: 3px solid #52c41a !important;
+}
+
+.ant-menu-submenu-open .ant-menu-submenu-title {
+  color: #52c41a;
+}
+
+@media screen and (max-width: 768px) {
+  .dashboard-sider {
+    position: absolute;
+    z-index: 999;
+  }
+  
+  .site-layout {
+    margin-left: 0;
+  }
+  
+  .site-layout.collapsed {
+    margin-left: 0;
+  }
+} 
