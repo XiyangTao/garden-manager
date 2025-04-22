@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: garden-db-local
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=garden_manager
+      - MYSQL_USER=garden_user
+      - MYSQL_PASSWORD=garden_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - garden-db-local-data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "garden_user",
+          "-pgarden_password",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  garden-db-local-data:

@@ -1,0 +1,108 @@
+# 构建产物
+/dist/
+/build/
+/out/
+/bin/
+*.exe
+*.dll
+*.so
+*.a
+*.lib
+*.class
+*.jar
+*.war
+*.ear
+
+# 依赖目录
+/node_modules/
+/bower_components/
+/.venv/
+/vendor/
+
+# 缓存文件
+*.log
+*.cache
+*.tmp
+*.swp
+*.swo
+*~
+
+# 环境文件
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# IDE配置
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 操作系统生成文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 测试覆盖率
+/coverage/
+*.lcov
+
+# 包管理器文件
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.7z
+
+# 前端项目补充
+.cache/
+.next/
+.nuxt/
+out/
+storybook-static/
+*.js.map
+*.css.map
+
+# Java项目补充
+/target/
+*.war
+*.ear
+*.iml
+
+# 包管理器文件
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# 子目录构建产物
+/backend/dist/
+/backend/build/
+/backend/out/
+/backend/bin/
+/garden-manager/dist/
+/garden-manager/build/
+/garden-manager/out/
+/garden-manager/bin/
+/garden-manager/node_modules/
+/garden-manager/.gitignore
+
+# 或者在现有构建产物规则前添加通配版本（两者选其一）
+# /**/dist/
+# /**/build/
+# /**/out/
+# /**/bin/
+
+# 谨慎：忽略子目录的gitignore配置
+/garden-manager/.gitignore 

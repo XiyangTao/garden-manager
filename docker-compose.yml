@@ -1,0 +1,88 @@
+version: "3"
+
+services:
+  frontend:
+    image: garden-manager-frontend:latest
+    build:
+      context: ./garden-manager
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - BACKEND_URL=http://backend:8080
+    depends_on:
+      - backend
+    networks:
+      - garden-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  backend:
+    image: garden-manager-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/garden_manager
+      - SPRING_DATASOURCE_USERNAME=garden_user
+      - SPRING_DATASOURCE_PASSWORD=secure_password
+      - APP_BASE_URL=
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - garden-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-q",
+          "--spider",
+          "http://localhost:8080/actuator/health",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=garden_manager
+      - MYSQL_USER=garden_user
+      - MYSQL_PASSWORD=secure_password
+      - MYSQL_ROOT_PASSWORD=root_secure_password
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - garden-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "garden_user",
+          "-psecure_password",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  garden-network:
+    driver: bridge
+
+volumes:
+  db-data:

@@ -1,0 +1,242 @@
+[
+  {
+    "companyName": "恒通园林绿化有限公司",
+    "companyType": "国有企业",
+    "legalPerson": "张三",
+    "contactPerson": "陈一",
+    "contactPhone": "13812345678",
+    "address": "北京市朝阳区建国路1号"
+  },
+  {
+    "companyName": "绿洲景观工程有限公司",
+    "companyType": "民营企业",
+    "legalPerson": "李四",
+    "contactPerson": "刘二",
+    "contactPhone": "13912345678",
+    "address": "上海市浦东新区人民路2号"
+  },
+  {
+    "companyName": "盛世环境科技有限公司",
+    "companyType": "外资企业",
+    "legalPerson": "王五",
+    "contactPerson": "吴三",
+    "contactPhone": "13712345678",
+    "address": "广州市天河区解放大道3号"
+  },
+  {
+    "companyName": "华美生态建设有限公司",
+    "companyType": "合资企业",
+    "legalPerson": "赵六",
+    "contactPerson": "周四",
+    "contactPhone": "13612345678",
+    "address": "深圳市南山区科技园4号"
+  },
+  {
+    "companyName": "永兴绿化养护有限公司",
+    "companyType": "其他",
+    "legalPerson": "钱七",
+    "contactPerson": "郑五",
+    "contactPhone": "13512345678",
+    "address": "杭州市西湖区创业大厦5号"
+  },
+  {
+    "companyName": "东方园林绿化有限公司",
+    "companyType": "国有企业",
+    "legalPerson": "李四",
+    "contactPerson": "陈一",
+    "contactPhone": "18812345678",
+    "address": "北京市西城区建国路6号"
+  },
+  {
+    "companyName": "北极星景观工程有限公司",
+    "companyType": "民营企业",
+    "legalPerson": "王五",
+    "contactPerson": "刘二",
+    "contactPhone": "18712345678",
+    "address": "上海市黄浦区人民路7号"
+  },
+  {
+    "companyName": "南方环境科技有限公司",
+    "companyType": "外资企业",
+    "legalPerson": "赵六",
+    "contactPerson": "吴三",
+    "contactPhone": "18612345678",
+    "address": "广州市海珠区解放大道8号"
+  },
+  {
+    "companyName": "西部生态建设有限公司",
+    "companyType": "合资企业",
+    "legalPerson": "钱七",
+    "contactPerson": "周四",
+    "contactPhone": "18512345678",
+    "address": "深圳市福田区科技园9号"
+  },
+  {
+    "companyName": "中天绿化养护有限公司",
+    "companyType": "其他",
+    "legalPerson": "张三",
+    "contactPerson": "郑五",
+    "contactPhone": "15912345678",
+    "address": "杭州市滨江区创业大厦10号"
+  },
+  {
+    "companyName": "恒通景观工程有限公司",
+    "companyType": "国有企业",
+    "legalPerson": "王五",
+    "contactPerson": "陈一",
+    "contactPhone": "13823456789",
+    "address": "北京市海淀区建国路11号"
+  },
+  {
+    "companyName": "绿洲环境科技有限公司",
+    "companyType": "民营企业",
+    "legalPerson": "赵六",
+    "contactPerson": "刘二",
+    "contactPhone": "13923456789",
+    "address": "上海市静安区人民路12号"
+  },
+  {
+    "companyName": "盛世生态建设有限公司",
+    "companyType": "外资企业",
+    "legalPerson": "钱七",
+    "contactPerson": "吴三",
+    "contactPhone": "13723456789",
+    "address": "广州市越秀区解放大道13号"
+  },
+  {
+    "companyName": "华美绿化养护有限公司",
+    "companyType": "合资企业",
+    "legalPerson": "张三",
+    "contactPerson": "周四",
+    "contactPhone": "13623456789",
+    "address": "深圳市龙岗区科技园14号"
+  },
+  {
+    "companyName": "永兴园林绿化有限公司",
+    "companyType": "其他",
+    "legalPerson": "李四",
+    "contactPerson": "郑五",
+    "contactPhone": "13523456789",
+    "address": "杭州市拱墅区创业大厦15号"
+  },
+  {
+    "companyName": "东方环境科技有限公司",
+    "companyType": "国有企业",
+    "legalPerson": "钱七",
+    "contactPerson": "陈一",
+    "contactPhone": "18823456789",
+    "address": "北京市丰台区建国路16号"
+  },
+  {
+    "companyName": "北极星生态建设有限公司",
+    "companyType": "民营企业",
+    "legalPerson": "张三",
+    "contactPerson": "刘二",
+    "contactPhone": "18723456789",
+    "address": "上海市徐汇区人民路17号"
+  },
+  {
+    "companyName": "南方绿化养护有限公司",
+    "companyType": "外资企业",
+    "legalPerson": "李四",
+    "contactPerson": "吴三",
+    "contactPhone": "18623456789",
+    "address": "广州市白云区解放大道18号"
+  },
+  {
+    "companyName": "西部园林绿化有限公司",
+    "companyType": "合资企业",
+    "legalPerson": "王五",
+    "contactPerson": "周四",
+    "contactPhone": "18523456789",
+    "address": "深圳市宝安区科技园19号"
+  },
+  {
+    "companyName": "中天景观工程有限公司",
+    "companyType": "其他",
+    "legalPerson": "赵六",
+    "contactPerson": "郑五",
+    "contactPhone": "15923456789",
+    "address": "杭州市余杭区创业大厦20号"
+  },
+  {
+    "companyName": "恒通生态建设有限公司",
+    "companyType": "国有企业",
+    "legalPerson": "张三",
+    "contactPerson": "陈一",
+    "contactPhone": "13834567890",
+    "address": "北京市东城区建国路21号"
+  },
+  {
+    "companyName": "绿洲绿化养护有限公司",
+    "companyType": "民营企业",
+    "legalPerson": "李四",
+    "contactPerson": "刘二",
+    "contactPhone": "13934567890",
+    "address": "上海市长宁区人民路22号"
+  },
+  {
+    "companyName": "盛世园林绿化有限公司",
+    "companyType": "外资企业",
+    "legalPerson": "王五",
+    "contactPerson": "吴三",
+    "contactPhone": "13734567890",
+    "address": "广州市荔湾区解放大道23号"
+  },
+  {
+    "companyName": "华美景观工程有限公司",
+    "companyType": "合资企业",
+    "legalPerson": "赵六",
+    "contactPerson": "周四",
+    "contactPhone": "13634567890",
+    "address": "深圳市盐田区科技园24号"
+  },
+  {
+    "companyName": "永兴环境科技有限公司",
+    "companyType": "其他",
+    "legalPerson": "钱七",
+    "contactPerson": "郑五",
+    "contactPhone": "13534567890",
+    "address": "杭州市萧山区创业大厦25号"
+  },
+  {
+    "companyName": "东方生态建设有限公司",
+    "companyType": "国有企业",
+    "legalPerson": "王五",
+    "contactPerson": "陈一",
+    "contactPhone": "18834567890",
+    "address": "北京市石景山区建国路26号"
+  },
+  {
+    "companyName": "北极星绿化养护有限公司",
+    "companyType": "民营企业",
+    "legalPerson": "赵六",
+    "contactPerson": "刘二",
+    "contactPhone": "18734567890",
+    "address": "上海市虹口区人民路27号"
+  },
+  {
+    "companyName": "南方园林绿化有限公司",
+    "companyType": "外资企业",
+    "legalPerson": "钱七",
+    "contactPerson": "吴三",
+    "contactPhone": "18634567890",
+    "address": "广州市番禺区解放大道28号"
+  },
+  {
+    "companyName": "西部景观工程有限公司",
+    "companyType": "合资企业",
+    "legalPerson": "张三",
+    "contactPerson": "周四",
+    "contactPhone": "18534567890",
+    "address": "深圳市罗湖区科技园29号"
+  },
+  {
+    "companyName": "中天环境科技有限公司",
+    "companyType": "其他",
+    "legalPerson": "李四",
+    "contactPerson": "郑五",
+    "contactPhone": "15934567890",
+    "address": "杭州市上城区创业大厦30号"
+  }
+] 
